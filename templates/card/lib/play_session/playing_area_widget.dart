@@ -22,36 +22,80 @@ class PlayingAreaWidget extends StatefulWidget {
 class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
   bool isHighlighted = false;
 
+  Widget Redporn() {
+    return Center(
+      child: Image.asset('icons/prize.png'),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final palette = context.watch<Palette>();
 
     return Container(
-      // color: Colors.black,
-      child: LimitedBox(
-        maxHeight: 200,
-        child: AspectRatio(
-          aspectRatio: 1 / 1,
-          child: DragTarget<PlayingCardDragData>(
-            builder: (context, candidateData, rejectedData) => Material(
-              color: isHighlighted ? palette.accept : palette.trueWhite,
-              shape: RoundedRectangleBorder(),
-              clipBehavior: Clip.hardEdge,
-              child: InkWell(
-                splashColor: palette.redPen,
-                onTap: _onAreaTap,
-                child: StreamBuilder(
-                  // Rebuild the card stack whenever the area changes
-                  // (either by a player action, or remotely).
-                  stream: widget.area.allChanges,
-                  builder: (context, child) => _CardStack(widget.area.cards),
-                ),
+      child: Column(
+        children: [
+          OpponentArea(context, palette),
+          Redporn(),
+          PlayerArea(context, palette),
+        ],
+      ),
+    );
+  }
+
+  Widget OpponentArea(BuildContext context, Palette palette) {
+    return LimitedBox(
+      maxHeight: 200,
+      child: AspectRatio(
+        aspectRatio: 1 / 1,
+        child: DragTarget<PlayingCardDragData>(
+          builder: (context, candidateData, rejectedData) => Material(
+            color: palette.trueWhite,
+            shape: RoundedRectangleBorder(),
+            clipBehavior: Clip.hardEdge,
+            // child: InkWell(
+            //   splashColor: palette.redPen,
+            //   onTap: _onAreaTap,
+            //   child: StreamBuilder(
+            //     // Rebuild the card stack whenever the area changes
+            //     // (either by a player action, or remotely).
+            //     stream: widget.area.allChanges,
+            //     builder: (context, child) => _CardStack(widget.area.cards),
+            //   ),
+            // ),
+          ),
+          onWillAcceptWithDetails: _onDragWillAccept,
+          onLeave: _onDragLeave,
+          onAcceptWithDetails: _onDragAccept,
+        ),
+      ),
+    );
+  }
+
+  Widget PlayerArea(BuildContext context, Palette palette) {
+    return LimitedBox(
+      maxHeight: 200,
+      child: AspectRatio(
+        aspectRatio: 1 / 1,
+        child: DragTarget<PlayingCardDragData>(
+          builder: (context, candidateData, rejectedData) => Material(
+            color: isHighlighted ? palette.accept : palette.trueWhite,
+            shape: RoundedRectangleBorder(),
+            clipBehavior: Clip.hardEdge,
+            child: InkWell(
+              splashColor: palette.redPen,
+              onTap: _onAreaTap,
+              child: StreamBuilder(
+                // Rebuild the card stack whenever the area changes
+                // (either by a player action, or remotely).
+                stream: widget.area.allChanges,
+                builder: (context, child) => _CardStack(widget.area.cards),
               ),
             ),
-            onWillAcceptWithDetails: _onDragWillAccept,
-            onLeave: _onDragLeave,
-            onAcceptWithDetails: _onDragAccept,
           ),
+          onWillAcceptWithDetails: _onDragWillAccept,
+          onLeave: _onDragLeave,
+          onAcceptWithDetails: _onDragAccept,
         ),
       ),
     );

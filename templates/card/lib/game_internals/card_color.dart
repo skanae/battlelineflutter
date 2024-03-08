@@ -6,7 +6,8 @@ enum CardColor {
   orange,
   purple,
   red,
-  yellow;
+  yellow,
+  other;
 
   Color get asColor {
     switch (this) {
@@ -22,6 +23,8 @@ enum CardColor {
         return Colors.red;
       case CardColor.yellow:
         return Colors.yellow;
+      case CardColor.other:
+        return Colors.transparent;
     }
   }
 }

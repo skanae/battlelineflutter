@@ -2,6 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'package:card/play_session/playing_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,7 @@ class _BoardWidgetState extends State<BoardWidget> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        OpponentHandWidget(),
         Padding(
           padding: const EdgeInsets.all(10),
           child: Row(
@@ -53,6 +55,38 @@ class _BoardWidgetState extends State<BoardWidget> {
         ),
         PlayerHandWidget(),
       ],
+    );
+  }
+}
+
+class OpponentHandWidget extends StatelessWidget {
+  const OpponentHandWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final boardState = context.watch<BoardState>();
+
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: PlayingCardWidget.height),
+        child: ListenableBuilder(
+          // Make sure we rebuild every time there's an update
+          // to the player's hand.
+          listenable: boardState.player,
+          builder: (context, child) {
+            return Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 10,
+              runSpacing: 10,
+              children: [
+                ...boardState.player.hand
+                    .map((card) => PlayingCardWidget(card, player: null)),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 }
