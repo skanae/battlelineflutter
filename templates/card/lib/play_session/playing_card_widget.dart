@@ -5,7 +5,6 @@ import '../audio/audio_controller.dart';
 import '../audio/sounds.dart';
 import '../game_internals/player.dart';
 import '../game_internals/playing_card.dart';
-import '../style/palette.dart';
 
 class PlayingCardWidget extends StatelessWidget {
   // A standard playing card is 57.1mm x 88.9mm.
@@ -21,8 +20,8 @@ class PlayingCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.watch<Palette>();
-    final textColor = Colors.black;
+    // final palette = context.watch<Palette>();
+    const textColor = Colors.black;
 
     final cardWidget = DefaultTextStyle(
       style: Theme.of(context).textTheme.bodyMedium!.apply(color: textColor),
@@ -31,23 +30,21 @@ class PlayingCardWidget extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           color: Colors.amberAccent,
-          border: Border.all(color: palette.ink, width: 5),
+          border: Border.all(color: card.cardcolor.asColor, width: 5),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Stack(
           children: [
-            Container(
+            SizedBox(
               height: 16,
               width: 16,
-              // color: Colors.red,
               child: Text('${card.value}', textAlign: TextAlign.center),
             ),
             Align(
               alignment: Alignment.bottomRight,
-              child: Container(
+              child: SizedBox(
                 height: 16,
                 width: 16,
-                // color: Colors.blue,
                 child: Text('${card.value}', textAlign: TextAlign.center),
               ),
             )

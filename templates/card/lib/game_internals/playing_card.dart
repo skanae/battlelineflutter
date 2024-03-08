@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 
+import 'card_color.dart';
 import 'card_suit.dart';
 
 @immutable
@@ -10,30 +11,24 @@ class PlayingCard {
 
   final CardSuit suit;
 
-  // final CardColor cardcolor;
+  final CardColor cardcolor;
 
   final int value;
 
-  const PlayingCard(
-    this.suit,
-    this.value,
-    // this.cardcolor
-  );
+  const PlayingCard(this.suit, this.value, this.cardcolor);
 
-  factory PlayingCard.fromJson(Map<String, dynamic> json) {
-    return PlayingCard(
-      CardSuit.values
-          .singleWhere((e) => e.internalRepresentation == json['suit']),
-      json['value'] as int,
-    );
-  }
+  // factory PlayingCard.fromJson(Map<String, dynamic> json) {
+  //   return PlayingCard(
+  //     CardSuit.values
+  //         .singleWhere((e) => e.internalRepresentation == json['suit']),
+  //     json['value'] as int,
+  //   );
+  // }
 
   factory PlayingCard.random([Random? random]) {
     random ??= _random;
-    return PlayingCard(
-      CardSuit.values[random.nextInt(CardSuit.values.length)],
-      2 + random.nextInt(9),
-    );
+    return PlayingCard(CardSuit.values[random.nextInt(CardSuit.values.length)],
+        2 + random.nextInt(9), CardColor.values[random.nextInt(6)]);
   }
 
   @override

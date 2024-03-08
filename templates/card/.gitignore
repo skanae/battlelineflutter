@@ -9,10 +9,16 @@
 .history
 .svn/
 migrate_working_dir/
+
+#俺が追加
 *.cc
 *.h
 *.cmake
 *.swift
+linux/
+windows/
+macos/
+
 # IntelliJ related
 *.iml
 *.ipr
