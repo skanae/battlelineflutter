@@ -10,9 +10,20 @@ import 'playing_area.dart';
 class BoardState {
   final VoidCallback onWin;
 
-  final PlayingArea areaOne = PlayingArea();
+  // final PlayingArea areaOne = PlayingArea();
+  //
+  // final PlayingArea areaTwo = PlayingArea();
 
+  final PlayingArea areaOne = PlayingArea();
   final PlayingArea areaTwo = PlayingArea();
+// areaThree から areaNine までのインスタンスを生成
+  final PlayingArea areaThree = PlayingArea();
+  final PlayingArea areaFour = PlayingArea();
+  final PlayingArea areaFive = PlayingArea();
+  final PlayingArea areaSix = PlayingArea();
+  final PlayingArea areaSeven = PlayingArea();
+  final PlayingArea areaEight = PlayingArea();
+  final PlayingArea areaNine = PlayingArea();
 
   final Player player = Player();
 

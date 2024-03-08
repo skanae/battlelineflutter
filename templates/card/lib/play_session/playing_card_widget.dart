@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../audio/audio_controller.dart';
 import '../audio/sounds.dart';
-import '../game_internals/card_suit.dart';
 import '../game_internals/player.dart';
 import '../game_internals/playing_card.dart';
 import '../style/palette.dart';
@@ -23,8 +22,7 @@ class PlayingCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.watch<Palette>();
-    final textColor =
-        card.suit.color == CardSuitColor.red ? palette.redPen : palette.ink;
+    final textColor = Colors.black;
 
     final cardWidget = DefaultTextStyle(
       style: Theme.of(context).textTheme.bodyMedium!.apply(color: textColor),
@@ -32,13 +30,28 @@ class PlayingCardWidget extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: palette.trueWhite,
-          border: Border.all(color: palette.ink),
+          color: Colors.amberAccent,
+          border: Border.all(color: palette.ink, width: 5),
           borderRadius: BorderRadius.circular(5),
         ),
-        child: Center(
-          child: Text('${card.suit.asCharacter}\n${card.value}',
-              textAlign: TextAlign.center),
+        child: Stack(
+          children: [
+            Container(
+              height: 16,
+              width: 16,
+              // color: Colors.red,
+              child: Text('${card.value}', textAlign: TextAlign.center),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                height: 16,
+                width: 16,
+                // color: Colors.blue,
+                child: Text('${card.value}', textAlign: TextAlign.center),
+              ),
+            )
+          ],
         ),
       ),
     );

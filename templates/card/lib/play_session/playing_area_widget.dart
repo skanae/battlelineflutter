@@ -26,29 +26,32 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
   Widget build(BuildContext context) {
     final palette = context.watch<Palette>();
 
-    return LimitedBox(
-      maxHeight: 200,
-      child: AspectRatio(
-        aspectRatio: 1 / 1,
-        child: DragTarget<PlayingCardDragData>(
-          builder: (context, candidateData, rejectedData) => Material(
-            color: isHighlighted ? palette.accept : palette.trueWhite,
-            shape: CircleBorder(),
-            clipBehavior: Clip.hardEdge,
-            child: InkWell(
-              splashColor: palette.redPen,
-              onTap: _onAreaTap,
-              child: StreamBuilder(
-                // Rebuild the card stack whenever the area changes
-                // (either by a player action, or remotely).
-                stream: widget.area.allChanges,
-                builder: (context, child) => _CardStack(widget.area.cards),
+    return Container(
+      // color: Colors.black,
+      child: LimitedBox(
+        maxHeight: 200,
+        child: AspectRatio(
+          aspectRatio: 1 / 1,
+          child: DragTarget<PlayingCardDragData>(
+            builder: (context, candidateData, rejectedData) => Material(
+              color: isHighlighted ? palette.accept : palette.trueWhite,
+              shape: RoundedRectangleBorder(),
+              clipBehavior: Clip.hardEdge,
+              child: InkWell(
+                splashColor: palette.redPen,
+                onTap: _onAreaTap,
+                child: StreamBuilder(
+                  // Rebuild the card stack whenever the area changes
+                  // (either by a player action, or remotely).
+                  stream: widget.area.allChanges,
+                  builder: (context, child) => _CardStack(widget.area.cards),
+                ),
               ),
             ),
+            onWillAcceptWithDetails: _onDragWillAccept,
+            onLeave: _onDragLeave,
+            onAcceptWithDetails: _onDragAccept,
           ),
-          onWillAcceptWithDetails: _onDragWillAccept,
-          onLeave: _onDragLeave,
-          onAcceptWithDetails: _onDragAccept,
         ),
       ),
     );
@@ -78,16 +81,17 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
 }
 
 class _CardStack extends StatelessWidget {
-  static const int _maxCards = 6;
+  static const int _maxCards = 4;
 
-  static const _leftOffset = 10.0;
+  static const _leftOffset = 0.0;
 
   static const _topOffset = 5.0;
 
   static const double _maxWidth =
       _maxCards * _leftOffset + PlayingCardWidget.width;
 
-  static const _maxHeight = _maxCards * _topOffset + PlayingCardWidget.height;
+  static const _maxHeight =
+      _maxCards * _topOffset * 5 + PlayingCardWidget.height;
 
   final List<PlayingCard> cards;
 
@@ -96,7 +100,8 @@ class _CardStack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SizedBox(
+      child: Container(
+        // color: Colors.black,
         width: _maxWidth,
         height: _maxHeight,
         child: Stack(
@@ -105,8 +110,8 @@ class _CardStack extends StatelessWidget {
                 i < cards.length;
                 i++)
               Positioned(
-                top: i * _topOffset,
-                left: i * _leftOffset,
+                top: i * 5 * _topOffset,
+                // left: _leftOffset,
                 child: PlayingCardWidget(cards[i]),
               ),
           ],

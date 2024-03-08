@@ -10,9 +10,15 @@ class PlayingCard {
 
   final CardSuit suit;
 
+  // final CardColor cardcolor;
+
   final int value;
 
-  const PlayingCard(this.suit, this.value);
+  const PlayingCard(
+    this.suit,
+    this.value,
+    // this.cardcolor
+  );
 
   factory PlayingCard.fromJson(Map<String, dynamic> json) {
     return PlayingCard(
