@@ -59,34 +59,50 @@ class _BoardWidgetState extends State<BoardWidget> {
   }
 }
 
+//相手側の7枚のカード
 class OpponentHandWidget extends StatelessWidget {
-  const OpponentHandWidget({super.key});
+  OpponentHandWidget({super.key});
+
+  static const double width = 57.1;
+  static const double height = 88.9;
+  static const textColor = Colors.black;
+
+  Widget OpponentHandCard(BuildContext context) {
+    return DefaultTextStyle(
+      style: Theme.of(context).textTheme.bodyMedium!.apply(color: textColor),
+      child: Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: Colors.amberAccent,
+            border: Border.all(color: Colors.amberAccent, width: 5),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Center(
+            child: Image.asset("icons/card_back.png"),
+          )),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final boardState = context.watch<BoardState>();
+    List<Widget> opponentHandCards = List.generate(
+      7, // Number of cards you want to display
+      (index) => OpponentHandCard(context),
+    );
 
     return Padding(
       padding: const EdgeInsets.all(10),
       child: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: PlayingCardWidget.height),
-        child: ListenableBuilder(
-          // Make sure we rebuild every time there's an update
-          // to the player's hand.
-          listenable: boardState.player,
-          builder: (context, child) {
-            return Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 10,
-              runSpacing: 10,
-              children: [
-                ...boardState.player.hand
-                    .map((card) => PlayingCardWidget(card, player: null)),
-              ],
-            );
-          },
-        ),
-      ),
+          constraints: BoxConstraints(minHeight: PlayingCardWidget.height),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              ...opponentHandCards,
+            ],
+          )),
     );
   }
 }

@@ -53,24 +53,8 @@ class PlayingCardWidget extends StatelessWidget {
       ),
     );
 
-    final cardBackWidget = DefaultTextStyle(
-      style: Theme.of(context).textTheme.bodyMedium!.apply(color: textColor),
-      child: Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: Colors.amberAccent,
-            border: Border.all(color: Colors.amberAccent, width: 5),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Center(
-            child: Image.asset("icons/card_back.png"),
-          )),
-    );
-
     /// Cards that aren't in a player's hand are not draggable.
-    // if (player == null) return cardWidget;
-    if (player == null) return cardBackWidget;
+    if (player == null) return cardWidget;
 
     return Draggable(
       feedback: Transform.rotate(
