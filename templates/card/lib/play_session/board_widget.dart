@@ -53,44 +53,71 @@ class _BoardWidgetState extends State<BoardWidget> {
             ],
           ),
         ),
-        PlayerHandWidget(),
+        Row(
+          children: [
+            Spacer(),
+            Deck(10),
+            SizedBox(
+              width: 57.1,
+            ),
+            PlayerHandWidget(),
+            SizedBox(
+              width: 57.1,
+            ),
+            Deck(60),
+            Spacer(),
+          ],
+        ),
       ],
+    );
+  }
+
+  Widget Deck(int numberOfCards) {
+    return Container(
+      width: 57.1,
+      height: 88.9 + 12,
+      child: Stack(
+        children: [
+          for (var i = 0; i < numberOfCards; i++)
+            Positioned(
+              top: i * 0.2,
+              child: cardBack(context),
+            ),
+        ],
+      ),
     );
   }
 }
 
+Widget cardBack(BuildContext context) {
+  const double width = 57.1;
+  const double height = 88.9;
+  return DefaultTextStyle(
+    style: Theme.of(context).textTheme.bodyMedium!.apply(color: Colors.black),
+    child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.amberAccent,
+          border: Border.all(color: Colors.grey, width: 0.1),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Center(
+          child: Image.asset("icons/card_back.png"),
+        )),
+  );
+}
+
 //相手側の7枚のカード
 class OpponentHandWidget extends StatelessWidget {
-  OpponentHandWidget({super.key});
-
-  static const double width = 57.1;
-  static const double height = 88.9;
-  static const textColor = Colors.black;
-
-  Widget OpponentHandCard(BuildContext context) {
-    return DefaultTextStyle(
-      style: Theme.of(context).textTheme.bodyMedium!.apply(color: textColor),
-      child: Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: Colors.amberAccent,
-            border: Border.all(color: Colors.amberAccent, width: 5),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Center(
-            child: Image.asset("icons/card_back.png"),
-          )),
-    );
-  }
+  const OpponentHandWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     List<Widget> opponentHandCards = List.generate(
       7, // Number of cards you want to display
-      (index) => OpponentHandCard(context),
+      (index) => cardBack(context),
     );
-
     return Padding(
       padding: const EdgeInsets.all(10),
       child: ConstrainedBox(

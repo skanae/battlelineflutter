@@ -28,7 +28,7 @@ class PlayingCard {
   factory PlayingCard.random([Random? random]) {
     random ??= _random;
     return PlayingCard(CardSuit.values[random.nextInt(CardSuit.values.length)],
-        2 + random.nextInt(9), CardColor.values[random.nextInt(6)]);
+        2 + random.nextInt(9), CardColor.values[random.nextInt(7)]);
   }
 
   @override
