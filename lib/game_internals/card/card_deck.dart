@@ -15,6 +15,7 @@ class CardDeck {
   List<PlayingCard> get deck => _deck;
 
   void initializeDeck() {
+    print("card Deck initialize");
     for (var color in CardColor.values) {
       if (color == CardColor.black || color == CardColor.other) {
         continue;
@@ -31,7 +32,8 @@ class CardDeck {
   }
 
   PlayingCard drawCard() {
-    if (_deck.length > 0) {
+    if (_deck.isNotEmpty) {
+      print("card Deck draw ${_deck.first}");
       return _deck.removeAt(0);
     } else {
       return PlayingCard(1, CardColor.other);

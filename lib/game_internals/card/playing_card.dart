@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:battlelineflutter/game_internals/card/card_deck.dart';
 import 'package:flutter/foundation.dart';
 
 import 'card_color.dart';
@@ -25,7 +26,12 @@ class PlayingCard {
   factory PlayingCard.random([Random? random]) {
     random ??= _random;
     return PlayingCard(
-        2 + random.nextInt(9), CardColor.values[random.nextInt(7)]);
+        2 + random.nextInt(9), CardColor.values[random.nextInt(6)]);
+  }
+
+  factory PlayingCard.draw([Random? random]) {
+    final CardDeck cardDeck = CardDeck();
+    return cardDeck.drawCard();
   }
 
   // @override

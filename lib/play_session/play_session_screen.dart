@@ -4,6 +4,7 @@
 
 import 'dart:async';
 
+import 'package:battlelineflutter/game_internals/card/card_deck.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart' hide Level;
@@ -42,6 +43,8 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
   late DateTime _startOfPlay;
 
   late final BoardState _boardState;
+
+  CardDeck cardDeck = CardDeck();
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +120,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
   @override
   void initState() {
     super.initState();
+    cardDeck.initializeDeck();
     _startOfPlay = DateTime.now();
     _boardState = BoardState(onWin: _playerWon);
   }
