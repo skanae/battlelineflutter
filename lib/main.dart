@@ -17,7 +17,6 @@ import 'router.dart';
 import 'settings/settings.dart';
 import 'style/palette.dart';
 
-//aa
 void main() async {
   // Basic logging setup.
   Logger.root.level = kDebugMode ? Level.FINE : Level.INFO;
@@ -76,7 +75,7 @@ class MyApp extends StatelessWidget {
           final palette = context.watch<Palette>();
 
           return MaterialApp.router(
-            title: 'My Flutter Game',
+            title: 'battlelineflutter',
             theme: ThemeData.from(
               colorScheme: ColorScheme.fromSeed(
                 seedColor: palette.darkPen,
