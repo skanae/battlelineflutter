@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../audio/audio_controller.dart';
 import '../audio/sounds.dart';
+import '../game_internals/card/playing_card.dart';
 import '../game_internals/player.dart';
-import '../game_internals/playing_card.dart';
 
 class PlayingCardWidget extends StatelessWidget {
   // A standard playing card is 57.1mm x 88.9mm.

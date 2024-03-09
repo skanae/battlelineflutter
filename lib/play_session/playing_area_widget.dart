@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 import '../audio/audio_controller.dart';
 import '../audio/sounds.dart';
+import '../game_internals/card/playing_card.dart';
 import '../game_internals/playing_area.dart';
-import '../game_internals/playing_card.dart';
 import '../style/palette.dart';
 import 'playing_card_widget.dart';
 

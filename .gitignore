@@ -18,6 +18,8 @@ migrate_working_dir/
 linux/
 windows/
 macos/
+samples/
+templates/
 
 # IntelliJ related
 *.iml

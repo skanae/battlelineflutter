@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'playing_card.dart';
+import 'card/playing_card.dart';
 
 class Player extends ChangeNotifier {
   static const maxCards = 7;

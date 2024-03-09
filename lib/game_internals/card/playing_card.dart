@@ -3,19 +3,16 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 
 import 'card_color.dart';
-import 'card_suit.dart';
 
 @immutable
 class PlayingCard {
   static final _random = Random();
 
-  final CardSuit suit;
-
   final CardColor cardcolor;
 
   final int value;
 
-  const PlayingCard(this.suit, this.value, this.cardcolor);
+  const PlayingCard(this.value, this.cardcolor);
 
   // factory PlayingCard.fromJson(Map<String, dynamic> json) {
   //   return PlayingCard(
@@ -27,25 +24,25 @@ class PlayingCard {
 
   factory PlayingCard.random([Random? random]) {
     random ??= _random;
-    return PlayingCard(CardSuit.values[random.nextInt(CardSuit.values.length)],
+    return PlayingCard(
         2 + random.nextInt(9), CardColor.values[random.nextInt(7)]);
   }
 
-  @override
-  int get hashCode => Object.hash(suit, value);
+  // @override
+  // int get hashCode => Object.hash(value);
 
   @override
   bool operator ==(Object other) {
-    return other is PlayingCard && other.suit == suit && other.value == value;
+    return other is PlayingCard && other.value == value;
   }
 
   Map<String, dynamic> toJson() => {
-        'suit': suit.internalRepresentation,
+        // 'suit': suit.internalRepresentation,
         'value': value,
       };
 
   @override
   String toString() {
-    return '$suit$value';
+    return '$cardcolor$value';
   }
 }
