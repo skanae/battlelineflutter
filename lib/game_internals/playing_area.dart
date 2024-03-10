@@ -6,7 +6,7 @@ import 'card/playing_card.dart';
 
 class PlayingArea {
   /// The maximum number of cards in this playing area.
-  static const int maxCards = 6;
+  static const int maxCards = 3;
 
   /// The current cards in this area.
   final List<PlayingCard> cards = [];

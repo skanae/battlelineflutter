@@ -102,30 +102,34 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
   }
 
   void _onAreaTap() {
-    widget.area.removeFirstCard();
+    // widget.area.removeFirstCard();
 
     final audioController = context.read<AudioController>();
     audioController.playSfx(SfxType.huhsh);
   }
 
   void _onDragAccept(DragTargetDetails<PlayingCardDragData> details) {
+    print("_onDragAccept");
     widget.area.acceptCard(details.data.card);
     details.data.holder.removeCard(details.data.card);
     setState(() => isHighlighted = false);
   }
 
   void _onDragLeave(PlayingCardDragData? data) {
+    print("_onDragLeave");
     setState(() => isHighlighted = false);
   }
 
   bool _onDragWillAccept(DragTargetDetails<PlayingCardDragData> details) {
+    print("_onDragWillAccept");
+    if (widget.area.cards.length == 3) return false;
     setState(() => isHighlighted = true);
     return true;
   }
 }
 
 class _CardStack extends StatelessWidget {
-  static const int _maxCards = 4;
+  static const int _maxCards = 3;
 
   static const _leftOffset = 0.0;
 
