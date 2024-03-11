@@ -2,6 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'package:battlelineflutter/game_internals/game_phase.dart';
 import 'package:flutter/foundation.dart';
 
 import 'player.dart';
@@ -9,9 +10,6 @@ import 'playing_area.dart';
 
 class BoardState {
   final VoidCallback onWin;
-  final VoidCallback onPlaceCard;
-
-  static bool isPlacedCard = false;
 
   final PlayingArea areaOne = PlayingArea();
   final PlayingArea areaTwo = PlayingArea();
@@ -25,7 +23,9 @@ class BoardState {
 
   final Player player = Player();
 
-  BoardState({required this.onWin, required this.onPlaceCard}) {
+  GamePhaseManager gamePhaseManager = GamePhaseManager();
+
+  BoardState({required this.onWin}) {
     player.addListener(_handlePlayerChange);
   }
 
@@ -42,8 +42,7 @@ class BoardState {
       onWin();
     }
     if (player.plyerhand.length == 6) {
-      onPlaceCard();
-      isPlacedCard = true;
+      gamePhaseManager.setPhase(GamePhase.Draw);
     }
   }
 }

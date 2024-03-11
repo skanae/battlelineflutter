@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:battlelineflutter/game_internals/board_state.dart';
+import 'package:battlelineflutter/game_internals/game_phase.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +22,7 @@ class PlayingAreaWidget extends StatefulWidget {
 
 class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
   bool isHighlighted = false;
+  GamePhaseManager gamePhaseManager = GamePhaseManager();
 
   Widget Redporn() {
     return Center(
@@ -124,7 +125,7 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
   bool _onDragWillAccept(DragTargetDetails<PlayingCardDragData> details) {
     print("_onDragWillAccept");
     if (widget.area.cards.length == 3) return false;
-    if (BoardState.isPlacedCard) return false;
+    if (gamePhaseManager.currentPhase == GamePhase.Draw) return false;
     setState(() => isHighlighted = true);
     return true;
   }

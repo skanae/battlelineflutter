@@ -5,6 +5,7 @@
 import 'dart:async';
 
 import 'package:battlelineflutter/game_internals/card/card_deck.dart';
+import 'package:battlelineflutter/game_internals/game_phase.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart' hide Level;
@@ -37,10 +38,9 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
   static const _celebrationDuration = Duration(milliseconds: 2000);
 
   static const _preCelebrationDuration = Duration(milliseconds: 500);
-  static const _preActionDuration = Duration(milliseconds: 300);
+  // static const _preActionDuration = Duration(milliseconds: 300);
 
   bool _duringCelebration = false;
-  bool _playerPlacedCard = false;
 
   late DateTime _startOfPlay;
   late final BoardState _boardState;
@@ -50,6 +50,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
   @override
   Widget build(BuildContext context) {
     final palette = context.watch<Palette>();
+    final gamePhase = context.watch<GamePhaseManager>();
 
     return MultiProvider(
       providers: [
@@ -84,7 +85,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
                   const Spacer(),
                   // The actual UI of the game.
                   BoardWidget(),
-                  Helptext(),
+                  Helptext(gamePhase),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -123,15 +124,24 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
     super.initState();
     cardDeck.initializeDeck();
     _startOfPlay = DateTime.now();
-    _boardState = BoardState(onWin: _playerWon, onPlaceCard: _playerPlaceCard);
+    _boardState = BoardState(onWin: _playerWon);
   }
 
-  Widget Helptext() {
-    var txt = "手札のカードを配置してください";
-    if (_playerPlacedCard) {
-      txt = "数字カードか戦術カードを引いてください";
-    }
-    return Text(txt);
+  Widget Helptext(GamePhaseManager gamePhaseManager) {
+    return Consumer<GamePhaseManager>(
+      builder: (context, GamePhaseManager, child) {
+        return Text(GamePhaseManager.currentPhase == GamePhase.Draw
+            ? "手札のカードを配置してください"
+            : "数字カードか戦術カードを引いてください");
+      },
+    );
+    // var txt = "手札のカードを配置してください";
+    // if (gamePhaseManager.currentPhase == GamePhase.Draw) {
+    //   setState(() {
+    //     txt = "数字カードか戦術カードを引いてください";
+    //   });
+    // }
+    // return Text(txt);
   }
 
   Future<void> _playerWon() async {
@@ -161,19 +171,18 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
     GoRouter.of(context).go('/play/won', extra: {'score': score});
   }
 
-  Future<void> _playerPlaceCard() async {
-    _log.info('playerPlace Card');
-
-    await Future<void>.delayed(_preActionDuration);
-
-    if (!mounted) return;
-
-    setState(() {
-      _playerPlacedCard = true;
-    });
-
-    if (!mounted) return;
-
-    // GoRouter.of(context).go('/play/won', extra: {'score': score});
-  }
+  // Future<void> _playerPlaceCard() async {
+  //   _log.info('playerPlace Card');
+  //
+  //   await Future<void>.delayed(_preActionDuration);
+  //
+  //   if (!mounted) return;
+  //
+  //   setState(() {
+  //   });
+  //
+  //   if (!mounted) return;
+  //
+  //   // GoRouter.of(context).go('/play/won', extra: {'score': score});
+  // }
 }

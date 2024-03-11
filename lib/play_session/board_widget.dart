@@ -2,6 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'package:battlelineflutter/game_internals/game_phase.dart';
 import 'package:battlelineflutter/game_internals/player.dart';
 import 'package:battlelineflutter/play_session/playing_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class BoardWidget extends StatefulWidget {
 
 class _BoardWidgetState extends State<BoardWidget> {
   final Player player = Player();
+  final GamePhaseManager gamePhaseManager = GamePhaseManager();
 
   @override
   Widget build(BuildContext context) {
@@ -114,23 +116,21 @@ class _BoardWidgetState extends State<BoardWidget> {
       child: deck(46),
       onTap: () {
         print("NumberCardsDeck tapped");
-        if (BoardState.isPlacedCard) {
-          nextTurn();
+        if (gamePhaseManager.currentPhase == GamePhase.Draw) {
+          playerDrawCard();
         }
       },
     );
   }
 
-  void nextTurn() {
+  void playerDrawCard() {
     setState(() {
       player.drawCardFromNumberCardsDeck(); //カード引く
       CardDeck cardDeck = CardDeck();
       cardDeck.tasikame();
-      BoardState.isPlacedCard = false;
+      gamePhaseManager.setPhase(GamePhase.PlayerTurn);
     });
   }
-
-  AIturn() {}
 }
 
 Widget cardBack(BuildContext context) {
