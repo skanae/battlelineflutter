@@ -37,11 +37,12 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
   static const _celebrationDuration = Duration(milliseconds: 2000);
 
   static const _preCelebrationDuration = Duration(milliseconds: 500);
+  static const _preActionDuration = Duration(milliseconds: 300);
 
   bool _duringCelebration = false;
+  bool _playerPlacedCard = false;
 
   late DateTime _startOfPlay;
-
   late final BoardState _boardState;
 
   CardDeck cardDeck = CardDeck();
@@ -83,7 +84,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
                   const Spacer(),
                   // The actual UI of the game.
                   BoardWidget(),
-                  Text("Drag cards to the two areas above."),
+                  Helptext(),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -122,7 +123,15 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
     super.initState();
     cardDeck.initializeDeck();
     _startOfPlay = DateTime.now();
-    _boardState = BoardState(onWin: _playerWon);
+    _boardState = BoardState(onWin: _playerWon, onPlaceCard: _playerPlaceCard);
+  }
+
+  Widget Helptext() {
+    var txt = "手札のカードを配置してください";
+    if (_playerPlacedCard) {
+      txt = "数字カードか戦術カードを引いてください";
+    }
+    return Text(txt);
   }
 
   Future<void> _playerWon() async {
@@ -150,5 +159,21 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
     if (!mounted) return;
 
     GoRouter.of(context).go('/play/won', extra: {'score': score});
+  }
+
+  Future<void> _playerPlaceCard() async {
+    _log.info('playerPlace Card');
+
+    await Future<void>.delayed(_preActionDuration);
+
+    if (!mounted) return;
+
+    setState(() {
+      _playerPlacedCard = true;
+    });
+
+    if (!mounted) return;
+
+    // GoRouter.of(context).go('/play/won', extra: {'score': score});
   }
 }

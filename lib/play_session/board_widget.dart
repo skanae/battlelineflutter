@@ -2,11 +2,13 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'package:battlelineflutter/game_internals/player.dart';
 import 'package:battlelineflutter/play_session/playing_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../game_internals/board_state.dart';
+import '../game_internals/card/card_deck.dart';
 import 'player_hand_widget.dart';
 import 'playing_area_widget.dart';
 
@@ -20,6 +22,8 @@ class BoardWidget extends StatefulWidget {
 }
 
 class _BoardWidgetState extends State<BoardWidget> {
+  final Player player = Player();
+
   @override
   Widget build(BuildContext context) {
     final boardState = context.watch<BoardState>();
@@ -28,52 +32,60 @@ class _BoardWidgetState extends State<BoardWidget> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        OpponentHandWidget(),
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            children: [
-              Expanded(child: PlayingAreaWidget(boardState.areaOne)),
-              SizedBox(width: 20),
-              Expanded(child: PlayingAreaWidget(boardState.areaTwo)),
-              SizedBox(width: 20),
-              Expanded(child: PlayingAreaWidget(boardState.areaThree)),
-              SizedBox(width: 20),
-              Expanded(child: PlayingAreaWidget(boardState.areaFour)),
-              SizedBox(width: 20),
-              Expanded(child: PlayingAreaWidget(boardState.areaFive)),
-              SizedBox(width: 20),
-              Expanded(child: PlayingAreaWidget(boardState.areaSix)),
-              SizedBox(width: 20),
-              Expanded(child: PlayingAreaWidget(boardState.areaSeven)),
-              SizedBox(width: 20),
-              Expanded(child: PlayingAreaWidget(boardState.areaEight)),
-              SizedBox(width: 20),
-              Expanded(child: PlayingAreaWidget(boardState.areaNine)),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            Spacer(),
-            Deck(10),
-            SizedBox(
-              width: 57.1,
-            ),
-            PlayerHandWidget(),
-            SizedBox(
-              width: 57.1,
-            ),
-            Deck(60),
-            Spacer(),
-          ],
-        ),
+        OpponentHandWidget(), //Stateless
+        nineCardPlacementAndPrize(boardState),
+        myHandAndTwoDeck(),
       ],
     );
   }
 
-  Widget Deck(int numberOfCards) {
-    return Container(
+  Widget nineCardPlacementAndPrize(BoardState boardState) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: [
+          Expanded(child: PlayingAreaWidget(boardState.areaOne)),
+          SizedBox(width: 20),
+          Expanded(child: PlayingAreaWidget(boardState.areaTwo)),
+          SizedBox(width: 20),
+          Expanded(child: PlayingAreaWidget(boardState.areaThree)),
+          SizedBox(width: 20),
+          Expanded(child: PlayingAreaWidget(boardState.areaFour)),
+          SizedBox(width: 20),
+          Expanded(child: PlayingAreaWidget(boardState.areaFive)),
+          SizedBox(width: 20),
+          Expanded(child: PlayingAreaWidget(boardState.areaSix)),
+          SizedBox(width: 20),
+          Expanded(child: PlayingAreaWidget(boardState.areaSeven)),
+          SizedBox(width: 20),
+          Expanded(child: PlayingAreaWidget(boardState.areaEight)),
+          SizedBox(width: 20),
+          Expanded(child: PlayingAreaWidget(boardState.areaNine)),
+        ],
+      ),
+    );
+  }
+
+  Widget myHandAndTwoDeck() {
+    return Row(
+      children: [
+        Spacer(),
+        tatticsCardsDeck(),
+        SizedBox(
+          width: 57.1,
+        ),
+        PlayerHandWidget(),
+        SizedBox(
+          width: 57.1,
+        ),
+        NumberCardsDeck(),
+        Spacer(),
+      ],
+    );
+  }
+
+  Widget deck(int numberOfCards) {
+    return SizedBox(
       width: 57.1,
       height: 88.9 + 12,
       child: Stack(
@@ -87,6 +99,38 @@ class _BoardWidgetState extends State<BoardWidget> {
       ),
     );
   }
+
+  Widget tatticsCardsDeck() {
+    return GestureDetector(
+      child: deck(10),
+      onTap: () {
+        print("tatticsCardsDeck tapped");
+      },
+    );
+  }
+
+  Widget NumberCardsDeck() {
+    return GestureDetector(
+      child: deck(46),
+      onTap: () {
+        print("NumberCardsDeck tapped");
+        if (BoardState.isPlacedCard) {
+          nextTurn();
+        }
+      },
+    );
+  }
+
+  void nextTurn() {
+    setState(() {
+      player.drawCardFromNumberCardsDeck(); //カード引く
+      CardDeck cardDeck = CardDeck();
+      cardDeck.tasikame();
+      BoardState.isPlacedCard = false;
+    });
+  }
+
+  AIturn() {}
 }
 
 Widget cardBack(BuildContext context) {
