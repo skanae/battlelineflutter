@@ -9,6 +9,9 @@ import 'playing_area.dart';
 
 class BoardState {
   final VoidCallback onWin;
+  final VoidCallback onPlaceCard;
+
+  static bool isPlacedCard = false;
 
   final PlayingArea areaOne = PlayingArea();
   final PlayingArea areaTwo = PlayingArea();
@@ -22,7 +25,7 @@ class BoardState {
 
   final Player player = Player();
 
-  BoardState({required this.onWin}) {
+  BoardState({required this.onWin, required this.onPlaceCard}) {
     player.addListener(_handlePlayerChange);
   }
 
@@ -35,8 +38,12 @@ class BoardState {
   }
 
   void _handlePlayerChange() {
-    if (player.hand.isEmpty) {
+    if (player.plyerhand.isEmpty) {
       onWin();
+    }
+    if (player.plyerhand.length == 6) {
+      onPlaceCard();
+      isPlacedCard = true;
     }
   }
 }

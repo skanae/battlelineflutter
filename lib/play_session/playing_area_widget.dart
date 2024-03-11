@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:battlelineflutter/game_internals/board_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,15 +36,15 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
     return Container(
       child: Column(
         children: [
-          OpponentArea(context, palette),
+          opponentArea(context, palette),
           Redporn(),
-          PlayerArea(context, palette),
+          playerArea(context, palette),
         ],
       ),
     );
   }
 
-  Widget OpponentArea(BuildContext context, Palette palette) {
+  Widget opponentArea(BuildContext context, Palette palette) {
     return LimitedBox(
       maxHeight: 200,
       child: AspectRatio(
@@ -72,7 +73,7 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
     );
   }
 
-  Widget PlayerArea(BuildContext context, Palette palette) {
+  Widget playerArea(BuildContext context, Palette palette) {
     return LimitedBox(
       maxHeight: 200,
       child: AspectRatio(
@@ -123,6 +124,7 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
   bool _onDragWillAccept(DragTargetDetails<PlayingCardDragData> details) {
     print("_onDragWillAccept");
     if (widget.area.cards.length == 3) return false;
+    if (BoardState.isPlacedCard) return false;
     setState(() => isHighlighted = true);
     return true;
   }
