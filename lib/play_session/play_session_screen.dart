@@ -2,19 +2,13 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:async';
-
 import 'package:battlelineflutter/game_internals/card/card_deck.dart';
 import 'package:battlelineflutter/game_internals/game_phase.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:logging/logging.dart' hide Level;
 import 'package:provider/provider.dart';
 
-import '../audio/audio_controller.dart';
-import '../audio/sounds.dart';
 import '../game_internals/board_state.dart';
-import '../game_internals/score.dart';
 import '../style/confetti.dart';
 import '../style/my_button.dart';
 import '../style/palette.dart';
@@ -33,16 +27,16 @@ class PlaySessionScreen extends StatefulWidget {
 }
 
 class _PlaySessionScreenState extends State<PlaySessionScreen> {
-  static final _log = Logger('PlaySessionScreen');
-
-  static const _celebrationDuration = Duration(milliseconds: 2000);
-
-  static const _preCelebrationDuration = Duration(milliseconds: 500);
+  // static final _log = Logger('PlaySessionScreen');
+  //
+  // static const _celebrationDuration = Duration(milliseconds: 2000);
+  //
+  // static const _preCelebrationDuration = Duration(milliseconds: 500);
   // static const _preActionDuration = Duration(milliseconds: 300);
 
-  bool _duringCelebration = false;
+  final bool _duringCelebration = false;
 
-  late DateTime _startOfPlay;
+  // late DateTime _startOfPlay;
   late final BoardState _boardState;
 
   CardDeck cardDeck = CardDeck();
@@ -85,7 +79,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
                   const Spacer(),
                   // The actual UI of the game.
                   BoardWidget(),
-                  Helptext(gamePhase),
+                  helptext(gamePhase),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -123,53 +117,45 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
   void initState() {
     super.initState();
     cardDeck.initializeDeck();
-    _startOfPlay = DateTime.now();
-    _boardState = BoardState(onWin: _playerWon);
+    // _startOfPlay = DateTime.now();
+    _boardState = BoardState();
   }
 
-  Widget Helptext(GamePhaseManager gamePhaseManager) {
+  Widget helptext(GamePhaseManager gamePhaseManager) {
     return Consumer<GamePhaseManager>(
-      builder: (context, GamePhaseManager, child) {
-        return Text(GamePhaseManager.currentPhase == GamePhase.Draw
+      builder: (context, gamePhaseManager, child) {
+        return Text(gamePhaseManager.currentPhase == GamePhase.Draw
             ? "手札のカードを配置してください"
             : "数字カードか戦術カードを引いてください");
       },
     );
-    // var txt = "手札のカードを配置してください";
-    // if (gamePhaseManager.currentPhase == GamePhase.Draw) {
-    //   setState(() {
-    //     txt = "数字カードか戦術カードを引いてください";
-    //   });
-    // }
-    // return Text(txt);
   }
 
-  Future<void> _playerWon() async {
-    _log.info('Player won');
-
-    // TODO: replace with some meaningful score for the card game
-    final score = Score(1, 1, DateTime.now().difference(_startOfPlay));
-
-    // final playerProgress = context.read<PlayerProgress>();
-    // playerProgress.setLevelReached(widget.level.number);
-
-    // Let the player see the game just after winning for a bit.
-    await Future<void>.delayed(_preCelebrationDuration);
-    if (!mounted) return;
-
-    setState(() {
-      _duringCelebration = true;
-    });
-
-    final audioController = context.read<AudioController>();
-    audioController.playSfx(SfxType.congrats);
-
-    /// Give the player some time to see the celebration animation.
-    await Future<void>.delayed(_celebrationDuration);
-    if (!mounted) return;
-
-    GoRouter.of(context).go('/play/won', extra: {'score': score});
-  }
+  // Future<void> _playerWon() async {
+  //   _log.info('Player won');
+  //
+  //   final score = Score(1, 1, DateTime.now().difference(_startOfPlay));
+  //
+  //   // final playerProgress = context.read<PlayerProgress>();
+  //   // playerProgress.setLevelReached(widget.level.number);
+  //
+  //   // Let the player see the game just after winning for a bit.
+  //   await Future<void>.delayed(_preCelebrationDuration);
+  //   if (!mounted) return;
+  //
+  //   setState(() {
+  //     _duringCelebration = true;
+  //   });
+  //
+  //   final audioController = context.read<AudioController>();
+  //   audioController.playSfx(SfxType.congrats);
+  //
+  //   /// Give the player some time to see the celebration animation.
+  //   await Future<void>.delayed(_celebrationDuration);
+  //   if (!mounted) return;
+  //
+  //   GoRouter.of(context).go('/play/won', extra: {'score': score});
+  // }
 
   // Future<void> _playerPlaceCard() async {
   //   _log.info('playerPlace Card');

@@ -9,7 +9,9 @@ class PlayingArea {
   static const int maxCards = 3;
 
   /// The current cards in this area.
-  final List<PlayingCard> cards = [];
+  final List<PlayingCard> playerCards = [];
+
+  final List<PlayingCard> opponentCards = [];
 
   final StreamController<void> _playerChanges =
       StreamController<void>.broadcast();
@@ -32,10 +34,16 @@ class PlayingArea {
   Stream<void> get remoteChanges => _remoteChanges.stream;
 
   /// Accepts the [card] into the area.
-  void acceptCard(PlayingCard card) {
-    cards.add(card);
-    _maybeTrim();
+  void acceptPlayerCard(PlayingCard card) {
+    playerCards.add(card);
+    // _maybeTrim();
     _playerChanges.add(null);
+  }
+
+  void acceptOpponentCard(PlayingCard card) {
+    opponentCards.add(card);
+    // _maybeTrim();
+    _remoteChanges.add(null);
   }
 
   void dispose() {
@@ -44,26 +52,26 @@ class PlayingArea {
   }
 
   /// Removes the first card in the area, if any.
-  void removeFirstCard() {
-    if (cards.isEmpty) return;
-    cards.removeAt(0);
-    _playerChanges.add(null);
-  }
+  // void removeFirstCard() {
+  //   if (playerCards.isEmpty) return;
+  //   playerCards.removeAt(0);
+  //   _playerChanges.add(null);
+  // }
 
   /// Replaces the cards in the area with [cards].
   ///
   /// This method is meant to be called when the cards are updated from
   /// a server.
-  void replaceWith(List<PlayingCard> cards) {
-    this.cards.clear();
-    this.cards.addAll(cards);
-    _maybeTrim();
-    _remoteChanges.add(null);
-  }
+  // void replaceWith(List<PlayingCard> cards) {
+  //   this.playerCards.clear();
+  //   this.playerCards.addAll(cards);
+  //   _maybeTrim();
+  //   _remoteChanges.add(null);
+  // }
 
-  void _maybeTrim() {
-    if (cards.length > maxCards) {
-      cards.removeRange(0, cards.length - maxCards);
-    }
-  }
+  // void _maybeTrim() {
+  //   if (playerCards.length > maxCards) {
+  //     playerCards.removeRange(0, playerCards.length - maxCards);
+  //   }
+  // }
 }

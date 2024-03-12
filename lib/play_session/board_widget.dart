@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:math' as math;
+
 import 'package:battlelineflutter/game_internals/game_phase.dart';
 import 'package:battlelineflutter/game_internals/player.dart';
 import 'package:battlelineflutter/play_session/playing_card_widget.dart';
@@ -9,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../game_internals/board_state.dart';
-import '../game_internals/card/card_deck.dart';
 import 'player_hand_widget.dart';
 import 'playing_area_widget.dart';
 
@@ -46,23 +47,23 @@ class _BoardWidgetState extends State<BoardWidget> {
       padding: const EdgeInsets.all(10),
       child: Row(
         children: [
-          Expanded(child: PlayingAreaWidget(boardState.areaOne)),
+          Expanded(child: PlayingAreaWidget(BoardState.areaOne)),
           SizedBox(width: 20),
-          Expanded(child: PlayingAreaWidget(boardState.areaTwo)),
+          Expanded(child: PlayingAreaWidget(BoardState.areaTwo)),
           SizedBox(width: 20),
-          Expanded(child: PlayingAreaWidget(boardState.areaThree)),
+          Expanded(child: PlayingAreaWidget(BoardState.areaThree)),
           SizedBox(width: 20),
-          Expanded(child: PlayingAreaWidget(boardState.areaFour)),
+          Expanded(child: PlayingAreaWidget(BoardState.areaFour)),
           SizedBox(width: 20),
-          Expanded(child: PlayingAreaWidget(boardState.areaFive)),
+          Expanded(child: PlayingAreaWidget(BoardState.areaFive)),
           SizedBox(width: 20),
-          Expanded(child: PlayingAreaWidget(boardState.areaSix)),
+          Expanded(child: PlayingAreaWidget(BoardState.areaSix)),
           SizedBox(width: 20),
-          Expanded(child: PlayingAreaWidget(boardState.areaSeven)),
+          Expanded(child: PlayingAreaWidget(BoardState.areaSeven)),
           SizedBox(width: 20),
-          Expanded(child: PlayingAreaWidget(boardState.areaEight)),
+          Expanded(child: PlayingAreaWidget(BoardState.areaEight)),
           SizedBox(width: 20),
-          Expanded(child: PlayingAreaWidget(boardState.areaNine)),
+          Expanded(child: PlayingAreaWidget(BoardState.areaNine)),
         ],
       ),
     );
@@ -117,19 +118,39 @@ class _BoardWidgetState extends State<BoardWidget> {
       onTap: () {
         print("NumberCardsDeck tapped");
         if (gamePhaseManager.currentPhase == GamePhase.Draw) {
-          playerDrawCard();
+          toNextPhase();
         }
       },
     );
   }
 
-  void playerDrawCard() {
+  void toNextPhase() {
     setState(() {
       player.drawCardFromNumberCardsDeck(); //カード引く
-      CardDeck cardDeck = CardDeck();
-      cardDeck.tasikame();
+      oponentTurn();
       gamePhaseManager.setPhase(GamePhase.PlayerTurn);
     });
+  }
+
+  void oponentTurn() {
+    //カードの選択、ドロー、UIの更新
+    ///TODO opponentに影響を及ぼす
+    var random = math.Random();
+    var currentPlayCard = player.opponentHand[random.nextInt(7)];
+    print(currentPlayCard);
+    print(player.opponentHand);
+    // PlayingArea playingArea = PlayingArea();
+    // playingArea.acceptOpponentCard(currentPlayCard);
+    for (var area in BoardState.areas) {
+      if (area.opponentCards.length < 3) {
+        area.acceptOpponentCard(currentPlayCard);
+        player.removeOpponentCard(currentPlayCard);
+        player.drawCardFromNumberCardsDeckOP();
+        print(player.opponentHand);
+        gamePhaseManager.setPhase(GamePhase.PlayerTurn);
+        return;
+      }
+    }
   }
 }
 

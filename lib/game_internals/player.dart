@@ -6,16 +6,21 @@ class Player extends ChangeNotifier {
   static const maxCards = 7;
 
   List<PlayingCard> get plyerhand => _plyerhand;
-  // List<PlayingCard> get opponentHand => _opponentHand;
+  List<PlayingCard> get opponentHand => _opponentHand;
 
-  static List<PlayingCard> _plyerhand =
+  static final List<PlayingCard> _plyerhand =
       List.generate(maxCards, (index) => PlayingCard.draw());
 
-  // static List<PlayingCard> _opponentHand =
-  //     List.generate(maxCards, (index) => PlayingCard.draw());
+  static final List<PlayingCard> _opponentHand =
+      List.generate(maxCards, (index) => PlayingCard.draw());
 
-  void removeCard(PlayingCard card) {
+  void removePlayerCard(PlayingCard card) {
     _plyerhand.remove(card);
+    notifyListeners();
+  }
+
+  void removeOpponentCard(PlayingCard card) {
+    opponentHand.remove(card);
     notifyListeners();
   }
 
@@ -24,8 +29,8 @@ class Player extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void drawCardFromNumberCardsDeckOP() {
-  //   _opponentHand.add(PlayingCard.draw());
-  //   notifyListeners();
-  // }
+  void drawCardFromNumberCardsDeckOP() {
+    _opponentHand.add(PlayingCard.draw());
+    notifyListeners();
+  }
 }

@@ -55,20 +55,22 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
             color: palette.trueWhite,
             shape: RoundedRectangleBorder(),
             clipBehavior: Clip.hardEdge,
-            // child: InkWell(
-            //   splashColor: palette.redPen,
-            //   onTap: _onAreaTap,
-            //   child: StreamBuilder(
-            //     // Rebuild the card stack whenever the area changes
-            //     // (either by a player action, or remotely).
-            //     stream: widget.area.allChanges,
-            //     builder: (context, child) => _CardStack(widget.area.cards),
-            //   ),
-            // ),
+            child: InkWell(
+              // splashColor: palette.redPen,
+              // onTap: _onAreaTap,
+              child: StreamBuilder(
+                // Rebuild the card stack whenever the area changes
+                // (either by a player action, or remotely).
+                ///TODO opponentに書き換える
+                stream: widget.area.allChanges,
+                builder: (context, child) =>
+                    _CardStack(widget.area.opponentCards),
+              ),
+            ),
           ),
-          onWillAcceptWithDetails: _onDragWillAccept,
-          onLeave: _onDragLeave,
-          onAcceptWithDetails: _onDragAccept,
+          // onWillAcceptWithDetails: _onDragWillAccept,
+          // onLeave: _onDragLeave,
+          // onAcceptWithDetails: _onDragAccept,
         ),
       ),
     );
@@ -91,7 +93,8 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
                 // Rebuild the card stack whenever the area changes
                 // (either by a player action, or remotely).
                 stream: widget.area.allChanges,
-                builder: (context, child) => _CardStack(widget.area.cards),
+                builder: (context, child) =>
+                    _CardStack(widget.area.playerCards),
               ),
             ),
           ),
@@ -112,8 +115,8 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
 
   void _onDragAccept(DragTargetDetails<PlayingCardDragData> details) {
     print("_onDragAccept");
-    widget.area.acceptCard(details.data.card);
-    details.data.holder.removeCard(details.data.card);
+    widget.area.acceptPlayerCard(details.data.card);
+    details.data.holder.removePlayerCard(details.data.card);
     setState(() => isHighlighted = false);
   }
 
@@ -124,7 +127,7 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
 
   bool _onDragWillAccept(DragTargetDetails<PlayingCardDragData> details) {
     print("_onDragWillAccept");
-    if (widget.area.cards.length == 3) return false;
+    if (widget.area.playerCards.length == 3) return false;
     if (gamePhaseManager.currentPhase == GamePhase.Draw) return false;
     setState(() => isHighlighted = true);
     return true;

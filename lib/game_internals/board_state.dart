@@ -3,33 +3,46 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:battlelineflutter/game_internals/game_phase.dart';
-import 'package:flutter/foundation.dart';
 
 import 'player.dart';
 import 'playing_area.dart';
 
 class BoardState {
-  final VoidCallback onWin;
+  // final VoidCallback onWin;
 
-  final PlayingArea areaOne = PlayingArea();
-  final PlayingArea areaTwo = PlayingArea();
-  final PlayingArea areaThree = PlayingArea();
-  final PlayingArea areaFour = PlayingArea();
-  final PlayingArea areaFive = PlayingArea();
-  final PlayingArea areaSix = PlayingArea();
-  final PlayingArea areaSeven = PlayingArea();
-  final PlayingArea areaEight = PlayingArea();
-  final PlayingArea areaNine = PlayingArea();
+  static final PlayingArea areaOne = PlayingArea();
+  static final PlayingArea areaTwo = PlayingArea();
+  static final PlayingArea areaThree = PlayingArea();
+  static final PlayingArea areaFour = PlayingArea();
+  static final PlayingArea areaFive = PlayingArea();
+  static final PlayingArea areaSix = PlayingArea();
+  static final PlayingArea areaSeven = PlayingArea();
+  static final PlayingArea areaEight = PlayingArea();
+  static final PlayingArea areaNine = PlayingArea();
 
   final Player player = Player();
 
   GamePhaseManager gamePhaseManager = GamePhaseManager();
 
-  BoardState({required this.onWin}) {
+  // BoardState({required this.onWin}) {
+  //   player.addListener(_handlePlayerChange);
+  // }
+
+  BoardState() {
     player.addListener(_handlePlayerChange);
   }
 
-  List<PlayingArea> get areas => [areaOne, areaTwo];
+  static List<PlayingArea> get areas => [
+        areaOne,
+        areaTwo,
+        areaThree,
+        areaFour,
+        areaFive,
+        areaSix,
+        areaSeven,
+        areaEight,
+        areaNine
+      ];
 
   void dispose() {
     player.removeListener(_handlePlayerChange);
@@ -39,7 +52,7 @@ class BoardState {
 
   void _handlePlayerChange() {
     if (player.plyerhand.isEmpty) {
-      onWin();
+      // onWin();
     }
     if (player.plyerhand.length == 6) {
       gamePhaseManager.setPhase(GamePhase.Draw);
